@@ -47,26 +47,32 @@ const fetchRestaurant = (query) => {
             'user-key': "b7fe6dfdae0278fcd0aea628958bc00a", 
         }
     }).then(function(cities) {
-        Object.keys(cities).forEach(function(elem) {
-            cityName = elem.toLowerCase.trim();
-            if (cityName == search) {
-                cityId = cities.id;
+        console.log(cities, search);
+        cities.location_suggestions.forEach(function(elem) {
+            console.log(elem, typeof elem);
+            cityName = elem.name.toLowerCase().trim();
+            if (cityName.match(search)) {
+                console.log("matched!")
+                cityId = elem.id;
             } else {
-                M.toast({html: "Uh oh, looks like that didn't work, please check your city and try again.", classes: "red rounded", displayLength: 1000*5});
+                // M.toast({html: "Uh oh, looks like that didn't work, please check your city and try again.", classes: "red rounded", displayLength: 1000*5});
             };
         })
         $.ajax({
-            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI($("#foodType").val().toLowerCase()),
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=italian", //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
             method: "GET",
-            heders: {
+            headers: {
                 'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
             }
         }).then(function(foodInfo) {
-            Object.keys(foodInfo).forEach(function(elem) {
+            foodArea.empty();
+            // M.toast({html: "Holy crap it worked and now we just need t"})
+            foodInfo.restaurants.forEach(function(elem) {
                 let foodItem = $("<div>")
-                foodItem.append("<h4>").text(elem.restaurants.restaurant.name);
-                foodItem.append("<p>").text("Cuisines: " + elem.restaurants.restaurant.cuisines);
-                foodItem.append("<p>").text("Address: " + elem.restaurants.restaurant.location.address);
+                let foodName = $("<h4>").text(elem.restaurant.name);
+                let foodType = $("<p>").text("Cuisines: " + elem.restaurant.cuisines);
+                let foodAddress = $("<p>").text("Address: " + elem.restaurant.location.address);
+                foodItem.append(foodName, foodType, foodAddress);
                 foodArea.append(foodItem);
 
             })

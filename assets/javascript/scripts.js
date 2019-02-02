@@ -22,18 +22,31 @@ searchButton = $("#searchButton");
 movieArea = $("movieArea");
 othersSearched = $("#othersSearched");
 database = firebase.database();
+regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
 
-//array of random words to search for to use with the random button
+//Array of random words to search for to use with the random button
 randomSearch = [];
 
 /////////Declare Functions
 
 //Restaurant API grab
+
+/// get city ID first, then put city ID in for restaurant search along with cuisine type
 const fetchRestaurant = (query) => {
+    let search = $("#searchArea").val().toLowerCase().trim();
+    let cityId;
     $.ajax({
         url: query,
         method: "GET",
-    }).then(function(foodInfo) {
+    }).then(function(cities) {
+        Object.keys(cities).forEach(function(elem) {
+            cityName = cities.toLowerCase.trim();
+            if (cityName == search) {
+                cityId = cities.id;
+            } else {
+                M.toast({html: "Uh oh, looks like that didn't work, please check your city and try again.", classes: "red rounded", displayLength: 1000*5});
+            };
+        })
         foodArea.text(foodInfo."Whatever we need");
     });
 };
@@ -42,7 +55,7 @@ const fetchRestaurant = (query) => {
 //need a function for data validation
 const validate = (input) => {
     //checks input via RegEx only allowing lowercase and capital letters
-    if (input == /[a-zA-Z][^0-9][^$%&.|*+=?/]/)  {
+    if (input == regEx)  {
         return true //allows next program to run if using if statement
     } else {
         alert("Nice try hacker!")
@@ -73,8 +86,8 @@ searchButton.click(function(event) {
     //checks only runs if user input is valid
     if (validate($("#searchArea").val())) {
         userInput = $("#searchArea").val()
-        queryURL = "super cool URL" + userInput + "more of the super cool URL" ;
-        fetchRestaurant(queryURL);
+        let movieQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
+        fetchRestaurant(movieQuery);
     };
 
 })

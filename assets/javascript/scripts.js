@@ -24,10 +24,12 @@ searchButton = $("#searchButton");
 movieArea = $("movieArea");
 othersSearched = $("#othersSearched");
 database = firebase.database();
-regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
-
+regEx = /[a-zA-Z][^@#$%^&*+=]/;
 //Array of random words to search for to use with the random button
 randomSearch = [];
+
+//Initialize materialize
+M.AutoInit();
 
 /////////Declare Functions
 
@@ -126,5 +128,5 @@ searchButton.click(function(event) {
         let movieQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(movieQuery);
     };
-})
+});
 // 

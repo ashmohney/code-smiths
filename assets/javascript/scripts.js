@@ -38,6 +38,16 @@ const fetchRestaurant = (query) => {
     });
 };
 
+//Open Movie API grab
+const fetchMovie = (queryMovie) => {
+    $.ajax({
+        url: queryMovie,
+        method: "GET",
+    }).then(function(movieInfo) {
+        movieArea.text(movieInfo."Whatever movie stuff")
+    });
+};
+
 
 //need a function for data validation
 const validate = (input) => {
@@ -73,8 +83,9 @@ searchButton.click(function(event) {
     //checks only runs if user input is valid
     if (validate($("#searchArea").val())) {
         userInput = $("#searchArea").val()
-        queryURL = "super cool URL" + userInput + "more of the super cool URL" ;
+        queryURL = "super cool URL" + userInput + "more of the super cool URL" ; //need for movie and restaurant super cool URLs
         fetchRestaurant(queryURL);
+        fetchMovie(queryMovie);
     };
 
 })

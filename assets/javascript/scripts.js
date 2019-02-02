@@ -3,6 +3,8 @@
 // zomato API Key: b7fe6dfdae0278fcd0aea628958bc00a
 // google maps search places API example: https://maps.googleapis.com/maps/api/place/findplacefromtext/output?parameters // key: AIzaSyCGN_z63cy7rfrb55lTeKd4UKG1CK6OYqA
 // https://maps.googleapis.com/maps/api/place/findplacefromtext/output?parameters
+// curl -X GET --header "Accept: application/json" --header "user-key: b7fe6dfdae0278fcd0aea628958bc00a" "https://developers.zomato.com/api/v2.1/search?entity_id=7509&entity_type=city&count=3&cuisines=italian
+"
 
 
 
@@ -38,16 +40,34 @@ const fetchRestaurant = (query) => {
     $.ajax({
         url: query,
         method: "GET",
+        headers: {
+            'user-key': "b7fe6dfdae0278fcd0aea628958bc00a", 
+        }
     }).then(function(cities) {
         Object.keys(cities).forEach(function(elem) {
-            cityName = cities.toLowerCase.trim();
+            cityName = elem.toLowerCase.trim();
             if (cityName == search) {
                 cityId = cities.id;
             } else {
                 M.toast({html: "Uh oh, looks like that didn't work, please check your city and try again.", classes: "red rounded", displayLength: 1000*5});
             };
         })
-        foodArea.text(foodInfo."Whatever we need");
+        $.ajax({
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI($("#foodType").val().toLowerCase()),
+            method: "GET",
+            heders: {
+                'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
+            }
+        }).then(function(foodInfo) {
+            Object.keys(foodInfo).forEach(function(elem) {
+                let foodItem = $("<div>")
+                foodItem.append("<h4>").text(elem.restaurants.restaurant.name);
+                foodItem.append("<p>").text("Cuisines: " + elem.restaurants.restaurant.cuisines);
+                foodItem.append("<p>").text("Address: " + elem.restaurants.restaurant.location.address);
+                foodArea.append(foodItem);
+
+            })
+        })
     });
 };
 
@@ -57,7 +77,14 @@ const fetchMovie = (queryMovie) => {
         url: queryMovie,
         method: "GET",
     }).then(function(movieInfo) {
-        movieArea.text(movieInfo."Whatever movie stuff")
+        Object.keys(movieInfo).forEach(function(elemMovie) {
+            let movieItem = $("<div>");
+            movieItem.append("<img>").addattr("src", elemMovie."poster");
+            movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
+            movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
+            movieArea.append(movieItem);
+        })
+        
     });
 };
 
@@ -99,6 +126,5 @@ searchButton.click(function(event) {
         let movieQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(movieQuery);
     };
-
 })
 // 

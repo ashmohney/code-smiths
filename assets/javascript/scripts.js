@@ -13,7 +13,7 @@ foodArea = $("#foodArea");
 searchButton = $("#searchButton");
 movieArea = $("movieArea");
 othersSearched = $("#othersSearched");
-regEx = /[a-zA-Z][^@#$%^&*+=]/;
+regEx = /.*?,.*/;  //[^@#$%^&*+=]/;
 //Array of random words to search for to use with the random button
 randomSearch = [];
 
@@ -95,10 +95,10 @@ const fetchRestaurant = (query) => {
 //need a function for data validation
 const validate = (input) => {
     //checks input via RegEx only allowing lowercase and capital letters
-    if (input == regEx)  {
+    if (input.match(regEx))  {
         return true //allows next program to run if using if statement
     } else {
-        alert("Nice try hacker!")
+        M.toast({html: "Hmmm, something went wrong...", classes: "red rounded", displayLength: 1000*5});
         return false
     }
 };

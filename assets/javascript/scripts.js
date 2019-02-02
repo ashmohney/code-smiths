@@ -51,6 +51,16 @@ const fetchRestaurant = (query) => {
     });
 };
 
+//Open Movie API grab
+const fetchMovie = (queryMovie) => {
+    $.ajax({
+        url: queryMovie,
+        method: "GET",
+    }).then(function(movieInfo) {
+        movieArea.text(movieInfo."Whatever movie stuff")
+    });
+};
+
 
 //need a function for data validation
 const validate = (input) => {

@@ -124,10 +124,9 @@ const updateSearchHistory = (search) => {
 //populate areas with information frim API's
 searchButton.click(function(event) {
     //checks only runs if user input is valid
-    if (validate($("#searchArea").val())) {
-        userInput = $("#searchArea").val()
-        let movieQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
-        fetchRestaurant(movieQuery);
+    if (validate($("#location").val())) {
+        userInput = $("#location").val()
+        let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
+        fetchRestaurant(cityQuery);
     };
 });
-// 

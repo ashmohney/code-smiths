@@ -8,6 +8,15 @@
 
 
 
+//Declare variables
+foodArea = $("#foodArea");
+searchButton = $("#searchButton");
+movieArea = $("movieArea");
+othersSearched = $("#othersSearched");
+regEx = /[a-zA-Z][^@#$%^&*+=]/;
+//Array of random words to search for to use with the random button
+randomSearch = [];
+
 //Declare Firebase
 var config = {
     apiKey: "AIzaSyDQ9TbJ1PsU3IWxpx7P18t13RkhWXdRffA",
@@ -16,18 +25,10 @@ var config = {
     projectId: "anightout-1548896687179",
     storageBucket: "anightout-1548896687179.appspot.com",
     messagingSenderId: "912754439954"
-  };
-  firebase.initializeApp(config);
-//Declare variables
-foodArea = $("#foodArea");
-searchButton = $("#searchButton");
-movieArea = $("movieArea");
-othersSearched = $("#othersSearched");
-database = firebase.database();
-regEx = /[a-zA-Z][^@#$%^&*+=]/;
-//Array of random words to search for to use with the random button
-randomSearch = [];
+};
+firebase.initializeApp(config);
 
+database = firebase.database();
 //Initialize materialize
 M.AutoInit();
 
@@ -37,7 +38,7 @@ M.AutoInit();
 
 /// get city ID first, then put city ID in for restaurant search along with cuisine type
 const fetchRestaurant = (query) => {
-    let search = $("#searchArea").val().toLowerCase().trim();
+    let search = $("#location").val().toLowerCase().trim();
     let cityId;
     $.ajax({
         url: query,
@@ -74,21 +75,21 @@ const fetchRestaurant = (query) => {
 };
 
 //Open Movie API grab
-const fetchMovie = (queryMovie) => {
-    $.ajax({
-        url: queryMovie,
-        method: "GET",
-    }).then(function(movieInfo) {
-        Object.keys(movieInfo).forEach(function(elemMovie) {
-            let movieItem = $("<div>");
-            movieItem.append("<img>").addattr("src", elemMovie."poster");
-            movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
-            movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
-            movieArea.append(movieItem);
-        })
+// const fetchMovie = (queryMovie) => {
+//     $.ajax({
+//         url: queryMovie,
+//         method: "GET",
+//     }).then(function(movieInfo) {
+//         Object.keys(movieInfo).forEach(function(elemMovie) {
+//             let movieItem = $("<div>");
+//             movieItem.append("<img>").addattr("src", elemMovie."poster");
+//             movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
+//             movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
+//             movieArea.append(movieItem);
+//         })
         
-    });
-};
+//     });
+// };
 
 
 //need a function for data validation

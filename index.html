@@ -9,7 +9,7 @@
 
     <body>
 
-        <h1>Cards</h1>
+        <h1>Night In</h1>
             <div class="container">
                     
                     <div class="row">
@@ -24,14 +24,12 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
-                                        <a class='dropdown-trigger btn-large black' href='#' data-target='dropdown1'>Select a Movie Genre</a>
-                                        <ul id='dropdown1' class='dropdown-content'>
-                                            <li><a href="#!">one</a></li>
-                                            <li><a href="#!">two</a></li>
-                                            <li><a href="#!">three</a></li>
-                                            <li><a href="#!">four</a></li>
-                                            <li><a href="#!">five</a></li>
-                                      </ul>
+                                        <select class="browser-default blue-grey">
+                                            <option value="" disabled selected>Choose your Movie Genre</option>
+                                            <option value="1">Adventure</option>
+                                            <option value="2">Action</option>
+                                            <option value="3">Drama</option>
+                                          </select>
                                     </p>
                                 </div>
                               </div>
@@ -48,14 +46,12 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
-                                        <a class='dropdown-trigger btn-large black' href='#' data-target='dropdown1'>Select a Cuisine</a>
-                                            <ul id='dropdown1' class='dropdown-content'>
-                                                <li><a href="#!">one</a></li>
-                                                <li><a href="#!">two</a></li>
-                                                <li><a href="#!">three</a></li>
-                                                <li><a href="#!">four</a></li>
-                                                <li><a href="#!">five</a></li>
-                                             </ul>
+                                        <select class="browser-default blue-grey">
+                                            <option value="" disabled selected>Choose your Cuisine</option>
+                                            <option value="1">American</option>
+                                            <option value="2">Asian</option>
+                                            <option value="3">Italian</option>
+                                          </select>
                                     </p>
                                 </div>
                               </div>
@@ -64,7 +60,7 @@
 
 
                     <div class="row center-align">
-                            <button class="btn waves-effect waves-light btn-large pink" type="submit" name="action">GENERATE
+                            <button class="btn pink btn-large pulse" type="submit" name="action">GENERATE
                                     <i class="material-icons right">send</i>
                             </button>
                     </div>
@@ -79,9 +75,6 @@
                                           <p>I am a very simple card. I am good at containing small bits of information.
                                           I am convenient because I require little markup to use effectively.</p>
                                         </div>
-                                        <div class="card-action center-align">
-                                          <a href="#">This is a link</a>
-                                        </div>
                                       </div>
                                     </div>
 
@@ -92,9 +85,6 @@
                                                 <p>I am a very simple card. I am good at containing small bits of information.
                                                 I am convenient because I require little markup to use effectively.</p>
                                               </div>
-                                              <div class="card-action center-align">
-                                                <a href="#">This is a link</a>
-                                              </div>
                                             </div>
                                     </div>
                             </div>
@@ -102,9 +92,17 @@
             
             
             </div> <!--End Container-->
+
+
+            
                     
             
             <!--JavaScript at end of body for optimized loading-->
       <script  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script>
+        $(document).ready(function() {
+           $('select').material_select();
+        });
+     </script>
     </body>
   </html>

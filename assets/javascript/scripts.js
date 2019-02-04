@@ -25,8 +25,15 @@ var config = {
     projectId: "anightout-1548896687179",
     storageBucket: "anightout-1548896687179.appspot.com",
     messagingSenderId: "912754439954"
-};
-firebase.initializeApp(config);
+  };
+  firebase.initializeApp(config);
+//Declare variables
+foodArea = $("#foodArea");
+searchButton = $("#searchButton");
+movieArea = $("#movieArea");
+othersSearched = $("#othersSearched");
+database = firebase.database();
+regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
 
 database = firebase.database();
 //Initialize materialize
@@ -83,18 +90,21 @@ const fetchRestaurant = (query) => {
 };
 
 //Open Movie API grab
-// const fetchMovie = (queryMovie) => {
-//     $.ajax({
-//         url: queryMovie,
-//         method: "GET",
-//     }).then(function(movieInfo) {
-//         Object.keys(movieInfo).forEach(function(elemMovie) {
-//             let movieItem = $("<div>");
-//             movieItem.append("<img>").addattr("src", elemMovie."poster");
-//             movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
-//             movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
-//             movieArea.append(movieItem);
-//         })
+const fetchMovie = (queryMovie) => {
+    let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
+    let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
+    let movieGenre;
+    $.ajax({
+        url: "http://www.omdbapi.com/?s" 
+        method: "GET",
+    }).then(function(movieInfo) {
+        Object.keys(movieInfo).forEach(function(elemMovie) {
+            let movieItem = $("<div>");
+            movieItem.append("<img>").addattr("src", elemMovie."poster");
+            movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
+            movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
+            movieArea.append(movieItem);
+        })
         
 //     });
 // };

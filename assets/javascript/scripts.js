@@ -21,7 +21,7 @@ var config = {
 //Declare variables
 foodArea = $("#foodArea");
 searchButton = $("#searchButton");
-movieArea = $("movieArea");
+movieArea = $("#movieArea");
 othersSearched = $("#othersSearched");
 database = firebase.database();
 regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
@@ -73,8 +73,11 @@ const fetchRestaurant = (query) => {
 
 //Open Movie API grab
 const fetchMovie = (queryMovie) => {
+    let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
+    let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
+    let movieGenre;
     $.ajax({
-        url: queryMovie,
+        url: "http://www.omdbapi.com/?s" 
         method: "GET",
     }).then(function(movieInfo) {
         Object.keys(movieInfo).forEach(function(elemMovie) {

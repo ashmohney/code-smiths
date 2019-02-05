@@ -25,9 +25,6 @@
                         </div>
                       </nav>
                       </div>
-
-
-
                       <div class="col s12 m4 l3 container">
                         <form>
                           <div class="input-field">
@@ -51,18 +48,16 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
-                                        <select class="browser-default transparent white-text">
+                                        <select class="browser-default transparent white-text" id="movieSelect">
                                             <option value="" disabled selected>Choose your Movie Genre</option>
-                                            <option value="1">Adventure</option>
-                                            <option value="2">Action</option>
-                                            <option value="3">Drama</option>
+                                            <option value="12">Adventure</option>
+                                            <option value="28">Action</option>
+                                            <option value="18">Drama</option>
                                           </select>
                                     </p>
                                 </div>
                               </div>
                             </div>
-
-
                             <div class="col s12 m6">
                               <div class="card">
 
@@ -76,11 +71,11 @@
                                 <div class="card-action">
                                     <p class="center-align">
 
-                                        <select class="browser-default transparent white-text">
+                                        <select class="browser-default transparent white-text" id="foodSelect">
                                             <option value="" disabled selected>Choose your Cuisine</option>
-                                            <option value="1">American</option>
-                                            <option value="2">Asian</option>
-                                            <option value="3">Italian</option>
+                                            <option value="american">American</option>
+                                            <option value="asian">Asian</option>
+                                            <option value="italian">Italian</option>
                                           </select>
 
                                     </p>
@@ -88,11 +83,9 @@
                               </div>
                             </div>
                     </div> <!--Ends row-->
-
-
                     <div class="row center-align">
 
-                            <button class="btn pink btn-large pulse" type="submit" name="action">GENERATE
+                            <button class="btn pink btn-large pulse" type="submit" name="action" id="searchButton">GENERATE
                                     <i class="material-icons right">stars</i>
 
                             </button>
@@ -104,7 +97,7 @@
 
                                     <div class="col s12 m6">
                                           <div class="card blue-grey darken-1">
-                                            <div class="card-content white-text">
+                                            <div class="card-content white-text" id="movieArea">
                                               <span class="card-title center-align">Card Title</span>
                                               <p>I am a very simple card. I am good at containing small bits of information.
                                               I am convenient because I require little markup to use effectively.</p>
@@ -118,7 +111,7 @@
                                     <div class="col s12 m6">
                                             <div class="card blue-grey darken-1">
 
-                                              <div class="card-content white-text">
+                                              <div class="card-content white-text" id="foodArea">
                                                 <span class="card-title center-align">Card Title</span>
 
                                                 <p>I am a very simple card. I am good at containing small bits of information.
@@ -127,6 +120,10 @@
                                             </div>
                                     </div>
                             </div>
+                        </div>
+                        <div>
+                          <h4 class="white-text center-align" id="othersSearched">Others Searched for...</h4>
+
                         </div>
                       <footer class="page-footer orange lighten-2">
                           <div class="container">

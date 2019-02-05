@@ -41,6 +41,23 @@ M.AutoInit();
 
 /////////Declare Functions
 
+
+function reverseObject(object) {
+    var newObject = {};
+    var keys = [];
+
+    for (var key in object) {
+        keys.push(key);
+    }
+
+    for (var i = keys.length - 1; i >= 0; i--) {
+      var value = object[keys[i]];
+      newObject[keys[i]]= value;
+    }       
+
+    return newObject;
+  };
+
 //Restaurant API grab
 
 /// get city ID first, then put city ID in for restaurant search along with cuisine type
@@ -90,21 +107,21 @@ const fetchRestaurant = (query) => {
 };
 
 //Open Movie API grab
-const fetchMovie = (queryMovie) => {
-    let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
-    let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
-    let movieGenre;
-    $.ajax({
-        url: "http://www.omdbapi.com/?s" 
-        method: "GET",
-    }).then(function(movieInfo) {
-        Object.keys(movieInfo).forEach(function(elemMovie) {
-            let movieItem = $("<div>");
-            movieItem.append("<img>").addattr("src", elemMovie."poster");
-            movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
-            movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
-            movieArea.append(movieItem);
-        })
+// const fetchMovie = (queryMovie) => {
+//     let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
+//     let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
+//     let movieGenre;
+//     $.ajax({
+//         url: "http://www.omdbapi.com/?s" 
+//         method: "GET",
+//     }).then(function(movieInfo) {
+//         Object.keys(movieInfo).forEach(function(elemMovie) {
+        //     let movieItem = $("<div>");
+        //     movieItem.append("<img>").addattr("src", elemMovie."poster");
+        //     movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
+        //     movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
+        //     movieArea.append(movieItem);
+        // })
         
 //     });
 // };
@@ -123,18 +140,33 @@ const validate = (input) => {
 
 //Push/Pull from database for others searched for area
 
-const updateSearchHistory = (search) => {
-    database.ref("/searchHistory").push(search);
-    database.ref("/searchHistory").on("value", function(snapshot) {
-        info = snapshot.val();
-        othersSearched.empty();
-        Object.keys(info).forEach(function(elem) {
-           searchItem = $("<p>");
-           searchItem.text(elem);
-            othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
-        });  
-    })
-};
+// const updateSearchHistory = (search) => {
+//     database.ref("/searchHistory").push(
+//         {
+//             searchText: search,
+//             timeStamp: firebase.database.ServerValue.TIMESTAMP,
+//         });
+//     database.ref("/searchHistory").orderByChild("timeStamp").once("value", function(snapshot) {
+//         info = snapshot.val();
+//         console.log(info);
+//         console.log(reverseObject(info));
+        // for (let key in info) {
+        //     descendingTime.push(key.timeStamp);
+        // };
+        
+        // othersSearched.empty();
+
+        // Object.keys(info).forEach(function(elem) {
+        //     searchItem = $("<p>");
+        //     searchItem.text(elem);
+        //     othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
+        //     searchList ++
+        //     if (searchList == 5) {
+        //         break;
+        //     }
+        //     });  
+//     });
+// };
 
 //////////Run functions
 
@@ -143,8 +175,9 @@ const updateSearchHistory = (search) => {
 searchButton.click(function(event) {
     //checks only runs if user input is valid
     if (validate($("#location").val())) {
-        userInput = $("#location").val()
+        userInput = $("#location").val();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery);
     };
+    updateSearchHistory($("#location").val());
 });

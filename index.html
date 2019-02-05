@@ -15,6 +15,28 @@
         
             <div class="container">
                     
+                    <div>
+                      <nav>
+                        <div class="nav-wrapper orange lighten-2">
+                          <a href="#" class="brand-logo">Night Out</a>
+                            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                               <li><a href="#">Previous</a></li>
+                            </ul>
+                        </div>
+                      </nav>
+                      </div>
+
+
+
+                      <div class="col s12 m4 l3 container">
+                        <form>
+                          <div class="input-field">
+                            <input id="location" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i>City, Sate</label>
+                            <i class="material-icons">close</i>
+                          </div>
+                        </form>
+                      </div>
                     <div class="row">
                             <div class="col s6 m6">
                               <div class="card transparent">
@@ -49,12 +71,14 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
+
                                         <select class="browser-default transparent white-text">
                                             <option value="" disabled selected>Choose your Cuisine</option>
                                             <option value="1">American</option>
                                             <option value="2">Asian</option>
                                             <option value="3">Italian</option>
                                           </select>
+
                                     </p>
                                 </div>
                               </div>
@@ -63,16 +87,20 @@
 
 
                     <div class="row center-align">
+
                             <button class="btn pink btn-large pulse" type="submit" name="action">GENERATE
                                     <i class="material-icons right">stars</i>
+
                             </button>
                     </div>
 
 
                     <div class="row">
                             <div class="row">
+
                                     <div class="col s6 m6">
                                       <div class="card transparent">
+
                                         <div class="card-content white-text">
                                           <span class="card-title center-align">Card Title</span>
                                           <p>I am a very simple card. I am good at containing small bits of information.
@@ -82,9 +110,11 @@
                                     </div>
 
                                     <div class="col s6 m6">
+
                                             <div class="card transparent">
                                               <div class="card-content white-text">
                                                 <span class="card-title center-align">Card Title</span>
+
                                                 <p>I am a very simple card. I am good at containing small bits of information.
                                                 I am convenient because I require little markup to use effectively.</p>
                                               </div>
@@ -101,11 +131,13 @@
                     
             
             <!--JavaScript at end of body for optimized loading-->
+
       <script  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
       <script>
         $(document).ready(function() {
            $('select').material_select();
         });
      </script>
+
     </body>
   </html>

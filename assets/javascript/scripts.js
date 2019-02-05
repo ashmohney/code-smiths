@@ -42,21 +42,21 @@ M.AutoInit();
 /////////Declare Functions
 
 
-function reverseObject(object) {
-    var newObject = {};
-    var keys = [];
+// function reverseObject(object) {
+//     var newObject = {};
+//     var keys = [];
 
-    for (var key in object) {
-        keys.push(key);
-    }
+//     for (var key in object) {
+//         keys.push(key);
+//     }
 
-    for (var i = keys.length - 1; i >= 0; i--) {
-      var value = object[keys[i]];
-      newObject[keys[i]]= value;
-    }       
+//     for (var i = keys.length - 1; i >= 0; i--) {
+//       var value = object[keys[i]];
+//       newObject[keys[i]]= value;
+//     }       
 
-    return newObject;
-  };
+//     return newObject;
+//   };
 
 //Restaurant API grab
 
@@ -166,8 +166,6 @@ const fetchMovie = (queryMovie) => {
     });
 };
 
-
-
 //need a function for data validation
 const validate = (input) => {
     //checks input via RegEx only allowing lowercase and capital letters
@@ -220,7 +218,6 @@ searchButton.click(function(event) {
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery);
         fetchMovie();
-        
     };
-    updateSearchHistory($("#location").val());
+    // updateSearchHistory($("#location").val());
 });

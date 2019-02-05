@@ -219,6 +219,7 @@ searchButton.click(function(event) {
         userInput = $("#location").val();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery);
+        fetchMovie();
         
     };
     updateSearchHistory($("#location").val());

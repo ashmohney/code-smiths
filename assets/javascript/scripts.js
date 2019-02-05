@@ -106,25 +106,66 @@ const fetchRestaurant = (query) => {
     });
 };
 
+// 0: {id: 28, name: "Action"}
+// 1: {id: 12, name: "Adventure"}
+// 2: {id: 16, name: "Animation"}
+// 3: {id: 35, name: "Comedy"}
+// 4: {id: 80, name: "Crime"}
+// 5: {id: 99, name: "Documentary"}
+// 6: {id: 18, name: "Drama"}
+// 7: {id: 10751, name: "Family"}
+// 8: {id: 14, name: "Fantasy"}
+// 9: {id: 36, name: "History"}
+// 10: {id: 27, name: "Horror"}
+// 11: {id: 10402, name: "Music"}
+// 12: {id: 9648, name: "Mystery"}
+// 13: {id: 10749, name: "Romance"}
+// 14: {id: 878, name: "Science Fiction"}
+// 15: {id: 10770, name: "TV Movie"}
+// 16: {id: 53, name: "Thriller"}
+// 17: {id: 10752, name: "War"}
+// 18: {id: 37, name: "Western"}
+
+
 //Open Movie API grab
-// const fetchMovie = (queryMovie) => {
-//     let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
-//     let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
-//     let movieGenre;
-//     $.ajax({
-//         url: "http://www.omdbapi.com/?s" 
-//         method: "GET",
-//     }).then(function(movieInfo) {
-//         Object.keys(movieInfo).forEach(function(elemMovie) {
-        //     let movieItem = $("<div>");
-        //     movieItem.append("<img>").addattr("src", elemMovie."poster");
-        //     movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
-        //     movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
-        //     movieArea.append(movieItem);
-        // })
+const fetchMovie = (queryMovie) => {
+    let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
+    let movieURL = "https://api.themoviedb.org/3/discover/movie?with_genres=";
+    let movieKey = "&api_key=d8422b75c0f0706a1e81d7ce46f5faeb&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+    let movieGenre = "";
+    let posterURL = "https://image.tmdb.org/t/p/w500";
+    $.ajax({
+        url: movieURL + movieGenre + movieKey,
+        method: "GET",
+    }).then(function(movieInfo) {
+        console.log(movieInfo);
+        movieArea.empty();
+
+        if (movieInfo.results[0].genre_ids[0] == "#movie-choice") {
         
-//     });
-// };
+        console.log(movieInfo.results[0].genre_ids[0]);
+
+        
+        let movieItem = $("<div>");
+        let moviePoster = $("<img>").addClass("responsive-img").attr("src", posterURL + movieInfo.results[0].poster_path);
+        let movieTitle = $("<h5>").text(movieInfo.results[0].title).addClass("center-align");
+        let movieSummary = $("<p>").text(movieInfo.results[0].overview);
+
+        movieItem.append(moviePoster);
+        movieItem.append(movieTitle);
+        movieItem.append(movieSummary);
+
+        movieArea.prepend(movieItem);
+
+        } else {
+            movieInfo.results.forEach((results, index) => {
+                console.log(results);
+                
+            });
+    };
+    });
+};
+
 
 
 //need a function for data validation
@@ -178,6 +219,7 @@ searchButton.click(function(event) {
         userInput = $("#location").val();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery);
+        
     };
     updateSearchHistory($("#location").val());
 });

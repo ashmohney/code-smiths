@@ -33,7 +33,7 @@ searchButton = $("#searchButton");
 movieArea = $("#movieArea");
 othersSearched = $("#othersSearched");
 database = firebase.database();
-regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
+// regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
 
 database = firebase.database();
 //Initialize materialize

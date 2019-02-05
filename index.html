@@ -13,8 +13,30 @@
         
             <div class="container">
                     
+
+
+                    <div>
+                      <nav>
+                        <div class="nav-wrapper orange lighten-2">
+                          <a href="#" class="brand-logo">Night In</a>
+                            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                               <li><a href="#">Previous</a></li>
+                            </ul>
+                        </div>
+                      </nav>
+                      </div>
+                      <div class="col s12 m4 l3 container">
+                        <form>
+                          <div class="input-field">
+                            <input id="location" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i>City, Sate</label>
+                            <i class="material-icons">close</i>
+                          </div>
+                        </form>
+                      </div>
+
                     <div class="row">
-                            <div class="col s6 m6">
+                            <div class="col s12 m6">
                               <div class="card transparent">
                                 <div class="card-image">
                                   <img src="https://cdn01.vulcanpost.com/wp-uploads/2014/04/kids-watching-movie.jpg" style="width:100%;height:100%;">
@@ -25,18 +47,22 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
-                                        <select class="browser-default transparent white-text">
+                                        <select class="browser-default transparent white-text" id="movieSelect">
                                             <option value="" disabled selected>Choose your Movie Genre</option>
-                                            <option value="1">Adventure</option>
-                                            <option value="2">Action</option>
-                                            <option value="3">Drama</option>
+                                            <option value="12">Adventure</option>
+                                            <option value="28">Action</option>
+                                            <option value="18">Drama</option>
                                           </select>
                                     </p>
                                 </div>
                               </div>
                             </div>
-                            <div class="col s6 m6">
+
+                            <div class="col s12 m6">
                               <div class="card transparent">
+
+                           
+
                                 <div class="card-image">
                                   <img src="https://media.fox5dc.com/media.fox5dc.com/photo/2018/09/20/getty_pizza_1537444422303_6095945_ver1.0_640_360.jpg" style="width:100%;height:100%;">
                                 </div>
@@ -46,11 +72,13 @@
                                 </div>
                                 <div class="card-action">
                                     <p class="center-align">
-                                        <select class="browser-default transparent white-text">
+
+                                        <select class="browser-default transparent white-text" id="foodSelect">
+
                                             <option value="" disabled selected>Choose your Cuisine</option>
-                                            <option value="1">American</option>
-                                            <option value="2">Asian</option>
-                                            <option value="3">Italian</option>
+                                            <option value="american">American</option>
+                                            <option value="asian">Asian</option>
+                                            <option value="italian">Italian</option>
                                           </select>
                                     </p>
                                 </div>
@@ -58,24 +86,31 @@
                             </div>
                     </div> <!--Ends row-->
                     <div class="row center-align">
-                            <button class="btn pink btn-large pulse" type="submit" name="action">GENERATE
+
+
+                            <button class="btn pink btn-large pulse" type="submit" name="action" id="searchButton">GENERATE
                                     <i class="material-icons right">stars</i>
                             </button>
                     </div>
                     <div class="row">
                             <div class="row">
-                                    <div class="col s6 m6">
-                                      <div class="card transparent">
-                                        <div class="card-content white-text">
-                                          <span class="card-title center-align">Card Title</span>
-                                          <p>I am a very simple card. I am good at containing small bits of information.
-                                          I am convenient because I require little markup to use effectively.</p>
-                                        </div>
-                                      </div>
+
+                                    <div class="col s12 m6">
+                                        <div class="card transparent"> 
+                                            <div class="card-content white-text" id="movieArea">
+                                              <span class="card-title center-align">Card Title</span>
+                                              <p>I am a very simple card. I am good at containing small bits of information.
+                                              I am convenient because I require little markup to use effectively.</p>
+                                            </div>
+                                            
+                                          </div>
                                     </div>
-                                    <div class="col s6 m6">
-                                            <div class="card transparent">
-                                              <div class="card-content white-text">
+
+                                    <div class="col s12 m6">
+                                            <div class="card transparent"> 
+
+                                              <div class="card-content white-text" id="foodArea">
+
                                                 <span class="card-title center-align">Card Title</span>
                                                 <p>I am a very very simple card. I am good at containing small bits of information.
                                                 I am convenient because I require little markup to use effectively.</p>
@@ -83,8 +118,40 @@
                                             </div>
                                     </div>
                             </div>
+
                     </div>
             
+
+                        </div>
+                        <div>
+                          <h4 class="white-text center-align" id="othersSearched">Others Searched for...</h4>
+
+                        </div>
+                      <footer class="page-footer orange lighten-2">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col l4 s12">
+
+                                  <img class="responsive-img" src="assets/img/OMDBLogoLong.png"/>
+                                  
+                              </div>
+                              <div class="col l4 offset-l4 s12">
+                                
+                                  <img class="responsive-img" src="assets/img/ZomatoLogo.png"/>
+
+                              </div>
+                          </div>
+                        </div>
+          
+
+                        <div class="footer-copyright">
+                          <div class="container">
+                              © 2019 Copyright Code-Smiths
+                            <a class="grey-text text-lighten-4 right" href="#!">     </a>
+                          </div>
+                        </div>
+                      </footer>
+
             
             </div> <!--End Container-->
             

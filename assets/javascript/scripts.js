@@ -27,13 +27,6 @@ var config = {
     messagingSenderId: "912754439954"
   };
   firebase.initializeApp(config);
-//Declare variables
-foodArea = $("#foodArea");
-searchButton = $("#searchButton");
-movieArea = $("#movieArea");
-othersSearched = $("#othersSearched");
-database = firebase.database();
-regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
 
 database = firebase.database();
 //Initialize materialize
@@ -42,21 +35,21 @@ M.AutoInit();
 /////////Declare Functions
 
 
-function reverseObject(object) {
-    var newObject = {};
-    var keys = [];
+// function reverseObject(object) {
+//     var newObject = {};
+//     var keys = [];
 
-    for (var key in object) {
-        keys.push(key);
-    }
+//     for (var key in object) {
+//         keys.push(key);
+//     }
 
-    for (var i = keys.length - 1; i >= 0; i--) {
-      var value = object[keys[i]];
-      newObject[keys[i]]= value;
-    }       
+//     for (var i = keys.length - 1; i >= 0; i--) {
+//       var value = object[keys[i]];
+//       newObject[keys[i]]= value;
+//     }       
 
-    return newObject;
-  };
+//     return newObject;
+//   };
 
 //Restaurant API grab
 
@@ -83,7 +76,7 @@ const fetchRestaurant = (query) => {
             };
         })
         $.ajax({
-            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=chinese", //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI($("#foodSelect").val()), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
             method: "GET",
             headers: {
                 'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
@@ -128,20 +121,21 @@ const fetchRestaurant = (query) => {
 
 
 //Open Movie API grab
-const fetchMovie = (queryMovie) => {
+const fetchMovie = (movieGenre) => {
     let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
     let movieURL = "https://api.themoviedb.org/3/discover/movie?with_genres=";
     let movieKey = "&api_key=d8422b75c0f0706a1e81d7ce46f5faeb&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
-    let movieGenre = "";
+    // let movieGenre;
     let posterURL = "https://image.tmdb.org/t/p/w500";
     $.ajax({
         url: movieURL + movieGenre + movieKey,
         method: "GET",
     }).then(function(movieInfo) {
         console.log(movieInfo);
+        console.log(movieInfo);
         movieArea.empty();
 
-        if (movieInfo.results[0].genre_ids[0] == "#movie-choice") {
+        // if (movieInfo.results[0].genre_ids[0] == $("#movieSelect").val()) {
         
         console.log(movieInfo.results[0].genre_ids[0]);
 
@@ -157,16 +151,14 @@ const fetchMovie = (queryMovie) => {
 
         movieArea.prepend(movieItem);
 
-        } else {
-            movieInfo.results.forEach((results, index) => {
-                console.log(results);
+        // } else {
+        //     movieInfo.results.forEach((results, index) => {
+        //         console.log(results);
                 
-            });
-    };
+        //     });
+    // };
     });
 };
-
-
 
 //need a function for data validation
 const validate = (input) => {
@@ -181,33 +173,31 @@ const validate = (input) => {
 
 //Push/Pull from database for others searched for area
 
-// const updateSearchHistory = (search) => {
-//     database.ref("/searchHistory").push(
-//         {
-//             searchText: search,
-//             timeStamp: firebase.database.ServerValue.TIMESTAMP,
-//         });
-//     database.ref("/searchHistory").orderByChild("timeStamp").once("value", function(snapshot) {
-//         info = snapshot.val();
-//         console.log(info);
-//         console.log(reverseObject(info));
-        // for (let key in info) {
-        //     descendingTime.push(key.timeStamp);
-        // };
+const updateSearchHistory = (search) => {
+    database.ref("/searchHistory").push(
+        {
+            searchText: search,
+            timeStamp: firebase.database.ServerValue.TIMESTAMP,
+        });
+    database.ref("/searchHistory").once("value", function(snapshot) {
         
-        // othersSearched.empty();
-
-        // Object.keys(info).forEach(function(elem) {
-        //     searchItem = $("<p>");
-        //     searchItem.text(elem);
-        //     othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
-        //     searchList ++
-        //     if (searchList == 5) {
-        //         break;
-        //     }
-        //     });  
-//     });
-// };
+        info = snapshot.val();
+        console.log("database grabbing");
+        othersSearched.empty();
+        console.log(info);
+        for (i=0; i<=5; i++) {
+            console.log("object looping")
+            searchItem = $("<p>");
+            searchItem.text(info[i].timeStamp);
+            othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
+            if (searchList == 5) {
+                break;
+            }
+            othersSearched.append(searchItem);
+            console.log(searchItem);
+        }
+    });
+};
 
 //////////Run functions
 
@@ -219,8 +209,7 @@ searchButton.click(function(event) {
         userInput = $("#location").val();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery);
-        fetchMovie();
-        
+        fetchMovie($("#movieSelect").val());
     };
-    updateSearchHistory($("#location").val());
+    // updateSearchHistory($("#location").val());
 });

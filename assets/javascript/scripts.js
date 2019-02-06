@@ -175,7 +175,6 @@ const validate = (input) => {
 const updateSearchHistory = (search1, search2) => {
     if ($("#movieSelect").val() != "" && $("#foodSelect").val() != "") {
         let searchString = search1 + " and " + search2;
-        console.log(searchString);
         // let timestamp = firebase.database.TIMESTAMP;
         database.ref("/searchHistory").push(
             {
@@ -192,14 +191,11 @@ const updateSearchHistory = (search1, search2) => {
     // database.ref("/searchHistory").on("value", function(snapshot) {
         // let results = snapshot.limitToLast(5);
         
-        othersSearched.empty();
         let history = database.ref("searchHistory").orderByChild("time").limitToLast(5);
         history.on("value", function(snapshot) { 
-        console.log("database grabbing");
-        let info = snapshot.val();
+            let info = snapshot.val();
+            othersSearched.empty();
         Object.keys(info).forEach(function(elem) {
-            console.log(elem);
-            // console.log(elem.searchText())
                 let searchItem = $("<h5>").addClass("white-text center-align");
                 searchItem.text(info[elem].searchText.toUpperCase());
                 othersSearched.append(searchItem);
@@ -232,12 +228,11 @@ searchButton.click(function(event) {
     if (validate($("#location").val())) {
         userInput = $("#location").val();
         let movieType = $("#movieSelect").val();
-        let foodType = $("#foodSelect").val()
-        let movieText = $("#movieSelect").text();
+        let foodType = $("#foodSelect option:selected").val()
+        let movieText = $("#movieSelect option:selected").text();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         fetchRestaurant(cityQuery, foodType);
         fetchMovie(movieType);
-        console.log(movieType, foodType);
         updateSearchHistory(movieText, foodType);
     };
 });

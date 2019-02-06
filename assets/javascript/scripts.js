@@ -231,8 +231,12 @@ searchButton.click(function(event) {
         let foodType = $("#foodSelect option:selected").val()
         let movieText = $("#movieSelect option:selected").text();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
-        fetchRestaurant(cityQuery, foodType);
-        fetchMovie(movieType);
-        updateSearchHistory(movieText, foodType);
+        console.log(movieType, foodType, movieText);
+
+        if ((movieText != "Choose your Movie Genre" && foodType != null) || (movieText != "Choose your Movie Genre" || foodType != null)) {
+            fetchRestaurant(cityQuery, foodType);
+            fetchMovie(movieType);
+            updateSearchHistory(movieText, foodType);
+        };
     };
 });

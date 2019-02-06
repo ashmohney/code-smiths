@@ -28,7 +28,7 @@ var config = {
   };
   firebase.initializeApp(config);
 
-database = firebase.database();
+const database = firebase.database();
 //Initialize materialize
 M.AutoInit();
 
@@ -54,7 +54,7 @@ M.AutoInit();
 //Restaurant API grab
 
 /// get city ID first, then put city ID in for restaurant search along with cuisine type
-const fetchRestaurant = (query) => {
+const fetchRestaurant = (query, food) => {
     let search = $("#location").val().toLowerCase().trim();
     let cityId;
     $.ajax({
@@ -76,7 +76,7 @@ const fetchRestaurant = (query) => {
             };
         })
         $.ajax({
-            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI($("#foodSelect").val()), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI(food), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
             method: "GET",
             headers: {
                 'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
@@ -138,7 +138,6 @@ const fetchMovie = (movieGenre) => {
         // if (movieInfo.results[0].genre_ids[0] == $("#movieSelect").val()) {
         
         console.log(movieInfo.results[0].genre_ids[0]);
-
         
         let movieItem = $("<div>");
         let moviePoster = $("<img>").addClass("responsive-img").attr("src", posterURL + movieInfo.results[0].poster_path);
@@ -173,33 +172,51 @@ const validate = (input) => {
 
 //Push/Pull from database for others searched for area
 
-const updateSearchHistory = (search) => {
+const updateSearchHistory = (search1, search2) => {
+    let searchString = search1 + " and " + search2;
+    // let timestamp = firebase.database.TIMESTAMP;
     database.ref("/searchHistory").push(
         {
-            searchText: search,
-            timeStamp: firebase.database.ServerValue.TIMESTAMP,
+            searchText: searchString,
+            time: new Date()* -1,
         });
-    database.ref("/searchHistory").once("value", function(snapshot) {
-        
-        info = snapshot.val();
+    };
+const refreshHistory = () => {
+    // database.ref("/searchHistory").on("value", function(snapshot) {
+        // let results = snapshot.limitToLast(5);
+        let history = database.ref("searchHistory").orderByChild("timeStamp").limitToLast(5);
+        history.on("value", function(snapshot) { 
         console.log("database grabbing");
+        let info = snapshot.val();
         othersSearched.empty();
-        console.log(info);
-        for (i=0; i<=5; i++) {
-            console.log("object looping")
-            searchItem = $("<p>");
-            searchItem.text(info[i].timeStamp);
-            othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
-            if (searchList == 5) {
-                break;
-            }
-            othersSearched.append(searchItem);
-            console.log(searchItem);
-        }
+        Object.keys(info).forEach(function(elem) {
+            console.log(elem);
+            // console.log(elem.searchText())
+                let searchItem = $("<h5>").addClass("white-text center-align");
+                searchItem.text(info[elem].searchText.toUpperCase());
+                othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrence
+                othersSearched.append(searchItem);
+
+        });
+        // let info = snapshot.child("timeStamp").val();
+        // console.log(info);
+        // for (i=0; i<=5; i++) {
+        // // console.log(info.timeStamp);
+        // console.log(info);
+            // console.log(searchItem);
+
+        // }
+        
+        
+        
     });
+
 };
 
+
 //////////Run functions
+
+refreshHistory();
 
 //button event that grabs user input
 //populate areas with information frim API's
@@ -207,9 +224,13 @@ searchButton.click(function(event) {
     //checks only runs if user input is valid
     if (validate($("#location").val())) {
         userInput = $("#location").val();
+        let movieType = $("#movieSelect").val();
+        let foodType = $("#foodSelect").val()
+        let movieText = $("#movieSelect").text();
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
-        fetchRestaurant(cityQuery);
-        fetchMovie($("#movieSelect").val());
+        fetchRestaurant(cityQuery, foodType);
+        fetchMovie(movieType);
+        console.log(movieType, foodType);
+        updateSearchHistory(movieText, foodType);
     };
-    // updateSearchHistory($("#location").val());
 });

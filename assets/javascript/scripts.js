@@ -11,7 +11,7 @@
 //Declare variables
 foodArea = $("#foodArea");
 searchButton = $("#searchButton");
-movieArea = $("movieArea");
+movieArea = $("#movieArea");
 othersSearched = $("#othersSearched");
 regEx = /.*?,.*/;  //[^@#$%^&*+=]/;
 //Array of random words to search for to use with the random button
@@ -165,7 +165,7 @@ const validate = (input) => {
     if (input.match(regEx))  {
         return true //allows next program to run if using if statement
     } else {
-        M.toast({html: "Hmmm, something went wrong...", classes: "red rounded", displayLength: 1000*5});
+        M.toast({html: "Hmmm, something went wrong. Make sure you have a city followed by a comma and the state's initials", classes: "red rounded", displayLength: 1000*5});
         return false
     }
 };
@@ -173,28 +173,35 @@ const validate = (input) => {
 //Push/Pull from database for others searched for area
 
 const updateSearchHistory = (search1, search2) => {
-    let searchString = search1 + " and " + search2;
-    // let timestamp = firebase.database.TIMESTAMP;
-    database.ref("/searchHistory").push(
-        {
-            searchText: searchString,
-            time: new Date()* -1,
-        });
+    if ($("#movieSelect").val() != "" && $("#foodSelect").val() != "") {
+        let searchString = search1 + " and " + search2;
+        console.log(searchString);
+        // let timestamp = firebase.database.TIMESTAMP;
+        database.ref("/searchHistory").push(
+            {
+                searchText: searchString,
+                time: new Date()* -1,
+            });
+            
+        } else {
+            
+            M.toast({html: "Did you select a movie genre and cuisine?", classes: "red rounded", displayLength: 1000*5});
+        }
     };
-const refreshHistory = () => {
+        const refreshHistory = () => {
     // database.ref("/searchHistory").on("value", function(snapshot) {
         // let results = snapshot.limitToLast(5);
-        let history = database.ref("searchHistory").orderByChild("timeStamp").limitToLast(5);
+        
+        othersSearched.empty();
+        let history = database.ref("searchHistory").orderByChild("time").limitToLast(5);
         history.on("value", function(snapshot) { 
         console.log("database grabbing");
         let info = snapshot.val();
-        othersSearched.empty();
         Object.keys(info).forEach(function(elem) {
             console.log(elem);
             // console.log(elem.searchText())
                 let searchItem = $("<h5>").addClass("white-text center-align");
                 searchItem.text(info[elem].searchText.toUpperCase());
-                othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrence
                 othersSearched.append(searchItem);
 
         });

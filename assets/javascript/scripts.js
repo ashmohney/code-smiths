@@ -99,25 +99,7 @@ const fetchRestaurant = (query, food) => {
     });
 };
 
-// 0: {id: 28, name: "Action"}
-// 1: {id: 12, name: "Adventure"}
-// 2: {id: 16, name: "Animation"}
-// 3: {id: 35, name: "Comedy"}
-// 4: {id: 80, name: "Crime"}
-// 5: {id: 99, name: "Documentary"}
-// 6: {id: 18, name: "Drama"}
-// 7: {id: 10751, name: "Family"}
-// 8: {id: 14, name: "Fantasy"}
-// 9: {id: 36, name: "History"}
-// 10: {id: 27, name: "Horror"}
-// 11: {id: 10402, name: "Music"}
-// 12: {id: 9648, name: "Mystery"}
-// 13: {id: 10749, name: "Romance"}
-// 14: {id: 878, name: "Science Fiction"}
-// 15: {id: 10770, name: "TV Movie"}
-// 16: {id: 53, name: "Thriller"}
-// 17: {id: 10752, name: "War"}
-// 18: {id: 37, name: "Western"}
+
 
 
 //Open Movie API grab
@@ -131,24 +113,40 @@ const fetchMovie = (movieGenre) => {
         url: movieURL + movieGenre + movieKey,
         method: "GET",
     }).then(function(movieInfo) {
-        console.log(movieInfo);
-        console.log(movieInfo);
+        // console.log(movieInfo);
         movieArea.empty();
+       
+        for (i=0; i<movieInfo.results.length; i++) {
+            let matched = false;
+            if (String(movieInfo.results[i].genre_ids[0]) == $("#movieSelect").val()) {
 
-        // if (movieInfo.results[0].genre_ids[0] == $("#movieSelect").val()) {
+            // movieInfo.results[i].some ((movieInfo.results[i].genre_ids[0]) == $("#movieSelect").val());
+            // console.log(some());
+
+                console.log((String(movieInfo.results[i].genre_ids[0])));
+                console.log($("#movieSelect").val());
         
-        console.log(movieInfo.results[0].genre_ids[0]);
+                let movieItem = $("<div>");
+                let moviePoster = $("<img>").addClass("responsive-img").attr("src", posterURL + movieInfo.results[i].poster_path);
+                let movieTitle = $("<h5>").text(movieInfo.results[i].title).addClass("center-align");
+                let movieSummary = $("<p>").text(movieInfo.results[i].overview);
+
+                movieItem.append(moviePoster);
+                movieItem.append(movieTitle);
+                movieItem.append(movieSummary);
+
+                movieArea.prepend(movieItem);
+                matched = true;
+                break;
+
+        // } else {
+        //     console.log("Houston, we have a problem.");
+        }
+    }
+});
+}
         
-        let movieItem = $("<div>");
-        let moviePoster = $("<img>").addClass("responsive-img").attr("src", posterURL + movieInfo.results[0].poster_path);
-        let movieTitle = $("<h5>").text(movieInfo.results[0].title).addClass("center-align");
-        let movieSummary = $("<p>").text(movieInfo.results[0].overview);
-
-        movieItem.append(moviePoster);
-        movieItem.append(movieTitle);
-        movieItem.append(movieSummary);
-
-        movieArea.prepend(movieItem);
+        
 
         // } else {
         //     movieInfo.results.forEach((results, index) => {
@@ -156,8 +154,8 @@ const fetchMovie = (movieGenre) => {
                 
         //     });
     // };
-    });
-};
+    // });
+
 
 //need a function for data validation
 const validate = (input) => {
@@ -201,14 +199,14 @@ const updateSearchHistory = (search1, search2) => {
                 othersSearched.append(searchItem);
 
         });
-        // let info = snapshot.child("timeStamp").val();
-        // console.log(info);
-        // for (i=0; i<=5; i++) {
-        // // console.log(info.timeStamp);
-        // console.log(info);
-            // console.log(searchItem);
+        let info = snapshot.child("timeStamp").val();
+        console.log(info);
+        for (i=0; i<=5; i++) {
+        // console.log(info.timeStamp);
+        console.log(info);
+            console.log(searchItem);
 
-        // }
+        }
         
         
         
@@ -228,8 +226,10 @@ searchButton.click(function(event) {
     if (validate($("#location").val())) {
         userInput = $("#location").val();
         let movieType = $("#movieSelect").val();
+
         let foodType = $("#foodSelect option:selected").val()
         let movieText = $("#movieSelect option:selected").text();
+
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
         console.log(movieType, foodType, movieText);
 
@@ -239,4 +239,5 @@ searchButton.click(function(event) {
             updateSearchHistory(movieText, foodType);
         };
     };
+
 });

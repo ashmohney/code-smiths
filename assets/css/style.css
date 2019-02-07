@@ -1,3 +1,19 @@
+body {
+    background: black;
+}
+
+.headerLogo img{
+    height: 60%;
+    width: 60%;
+}
+
+.white-icon {
+    color: white;
+}
+
+.page-footer {
+    margin-top: 3rem;
+}
 
 input.select-dropdown {
     color: whitesmoke;
@@ -8,4 +24,13 @@ input.select-dropdown {
 .select-wrapper {
 /* border-top: 1px white solid; */
 background: #ffb74d;
+}
+
+.smallDivider {
+    height: 0.5rem;
+    margin: 1rem 0;
+}
+
+.padding-m {
+padding-bottom: 1.5rem;
 }

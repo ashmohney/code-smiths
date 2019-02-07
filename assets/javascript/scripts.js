@@ -11,7 +11,7 @@
 //Declare variables
 foodArea = $("#foodArea");
 searchButton = $("#searchButton");
-movieArea = $("movieArea");
+movieArea = $("#movieArea");
 othersSearched = $("#othersSearched");
 regEx = /.*?,.*/;  //[^@#$%^&*+=]/;
 //Array of random words to search for to use with the random button
@@ -27,24 +27,34 @@ var config = {
     messagingSenderId: "912754439954"
   };
   firebase.initializeApp(config);
-//Declare variables
-foodArea = $("#foodArea");
-searchButton = $("#searchButton");
-movieArea = $("#movieArea");
-othersSearched = $("#othersSearched");
-database = firebase.database();
-regEx = /^[0-9]{5}(?:-[0-9]{4})?$/
 
-database = firebase.database();
+const database = firebase.database();
 //Initialize materialize
 M.AutoInit();
 
 /////////Declare Functions
 
+
+// function reverseObject(object) {
+//     var newObject = {};
+//     var keys = [];
+
+//     for (var key in object) {
+//         keys.push(key);
+//     }
+
+//     for (var i = keys.length - 1; i >= 0; i--) {
+//       var value = object[keys[i]];
+//       newObject[keys[i]]= value;
+//     }       
+
+//     return newObject;
+//   };
+
 //Restaurant API grab
 
 /// get city ID first, then put city ID in for restaurant search along with cuisine type
-const fetchRestaurant = (query) => {
+const fetchRestaurant = (query, food) => {
     let search = $("#location").val().toLowerCase().trim();
     let cityId;
     $.ajax({
@@ -66,7 +76,7 @@ const fetchRestaurant = (query) => {
             };
         })
         $.ajax({
-            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=chinese", //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI(food), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
             method: "GET",
             headers: {
                 'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
@@ -89,25 +99,62 @@ const fetchRestaurant = (query) => {
     });
 };
 
+
+
+
 //Open Movie API grab
-const fetchMovie = (queryMovie) => {
+const fetchMovie = (movieGenre) => {
     let movieAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODQyMmI3NWMwZjA3MDZhMWU4MWQ3Y2U0NmY1ZmFlYiIsInN1YiI6IjVjNTVkZGNjOTI1MTQxMGUxZDRlMjk5YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.eRGYq9bPnbUtdjchP3MacCSTppqtX4wHHkjF3E-Hzb8";
-    let movieKey = "d8422b75c0f0706a1e81d7ce46f5faeb";
-    let movieGenre;
+    let movieURL = "https://api.themoviedb.org/3/discover/movie?with_genres=";
+    let movieKey = "&api_key=d8422b75c0f0706a1e81d7ce46f5faeb&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
+    // let movieGenre;
+    let posterURL = "https://image.tmdb.org/t/p/w500";
     $.ajax({
-        url: "http://www.omdbapi.com/?s" 
+        url: movieURL + movieGenre + movieKey,
         method: "GET",
     }).then(function(movieInfo) {
-        Object.keys(movieInfo).forEach(function(elemMovie) {
-            let movieItem = $("<div>");
-            movieItem.append("<img>").addattr("src", elemMovie."poster");
-            movieItem.append("<h4>").text(elemMovie."etc etc etc"); //title
-            movieItem.append("<p>").text("Rating: " + elemMovie."etc etc etc");  
-            movieArea.append(movieItem);
-        })
+        // console.log(movieInfo);
+        movieArea.empty();
+       
+        for (i=0; i<movieInfo.results.length; i++) {
+            let matched = false;
+            if (String(movieInfo.results[i].genre_ids[0]) == $("#movieSelect").val()) {
+
+            // movieInfo.results[i].some ((movieInfo.results[i].genre_ids[0]) == $("#movieSelect").val());
+            // console.log(some());
+
+                console.log((String(movieInfo.results[i].genre_ids[0])));
+                console.log($("#movieSelect").val());
         
-//     });
-// };
+                let movieItem = $("<div>");
+                let moviePoster = $("<img>").addClass("responsive-img").attr("src", posterURL + movieInfo.results[i].poster_path);
+                let movieTitle = $("<h5>").text(movieInfo.results[i].title).addClass("center-align");
+                let movieSummary = $("<p>").text(movieInfo.results[i].overview);
+
+                movieItem.append(moviePoster);
+                movieItem.append(movieTitle);
+                movieItem.append(movieSummary);
+
+                movieArea.prepend(movieItem);
+                matched = true;
+                break;
+
+        // } else {
+        //     console.log("Houston, we have a problem.");
+        }
+    }
+});
+}
+        
+        
+
+        // } else {
+        //     movieInfo.results.forEach((results, index) => {
+        //         console.log(results);
+                
+        //     });
+    // };
+    // });
 
 
 //need a function for data validation
@@ -116,35 +163,81 @@ const validate = (input) => {
     if (input.match(regEx))  {
         return true //allows next program to run if using if statement
     } else {
-        M.toast({html: "Hmmm, something went wrong...", classes: "red rounded", displayLength: 1000*5});
+        M.toast({html: "Hmmm, something went wrong. Make sure you have a city followed by a comma and the state's initials", classes: "red rounded", displayLength: 1000*5});
         return false
     }
 };
 
 //Push/Pull from database for others searched for area
 
-const updateSearchHistory = (search) => {
-    database.ref("/searchHistory").push(search);
-    database.ref("/searchHistory").on("value", function(snapshot) {
-        info = snapshot.val();
-        othersSearched.empty();
+const updateSearchHistory = (search1, search2) => {
+    if ($("#movieSelect").val() != "" && $("#foodSelect").val() != "") {
+        let searchString = search1 + " and " + search2;
+        // let timestamp = firebase.database.TIMESTAMP;
+        database.ref("/searchHistory").push(
+            {
+                searchText: searchString,
+                time: new Date()* -1,
+            });
+            
+        } else {
+            
+            M.toast({html: "Did you select a movie genre and cuisine?", classes: "red rounded", displayLength: 1000*5});
+        }
+    };
+        const refreshHistory = () => {
+    // database.ref("/searchHistory").on("value", function(snapshot) {
+        // let results = snapshot.limitToLast(5);
+        
+        let history = database.ref("searchHistory").orderByChild("time").limitToLast(5);
+        history.on("value", function(snapshot) { 
+            let info = snapshot.val();
+            othersSearched.empty();
         Object.keys(info).forEach(function(elem) {
-           searchItem = $("<p>");
-           searchItem.text(elem);
-            othersSearched.append(searchItem); //will just create a list of each item, need to sort based on occurrences
-        });  
-    })
+                let searchItem = $("<h5>").addClass("white-text center-align");
+                searchItem.text(info[elem].searchText.toUpperCase());
+                othersSearched.append(searchItem);
+
+        });
+        let info = snapshot.child("timeStamp").val();
+        console.log(info);
+        for (i=0; i<=5; i++) {
+        // console.log(info.timeStamp);
+        console.log(info);
+            console.log(searchItem);
+
+        }
+        
+        
+        
+    });
+
 };
 
+
 //////////Run functions
+
+refreshHistory();
 
 //button event that grabs user input
 //populate areas with information frim API's
 searchButton.click(function(event) {
     //checks only runs if user input is valid
     if (validate($("#location").val())) {
-        userInput = $("#location").val()
+        userInput = $("#location").val();
+        let movieType = $("#movieSelect").val();
+
+        let foodType = $("#foodSelect option:selected").val()
+        let movieText = $("#movieSelect option:selected").text();
+
         let cityQuery = "https://developers.zomato.com/api/v2.1/cities?q=" + encodeURI(userInput) + "count=6";
-        fetchRestaurant(cityQuery);
+        console.log(movieType, foodType, movieText);
+
+        if ((movieText != "Choose your Movie Genre" && foodType != null) || (movieText != "Choose your Movie Genre" || foodType != null)) {
+            fetchRestaurant(cityQuery, foodType);
+            fetchMovie(movieType);
+            updateSearchHistory(movieText, foodType);
+        };
     };
+
 });

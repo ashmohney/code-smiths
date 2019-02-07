@@ -86,12 +86,11 @@ const fetchRestaurant = (query, food) => {
             // M.toast({html: "Holy crap it worked and now we just need t"})
             foodInfo.restaurants.forEach(function(elem) {
                 let foodItem = $("<div>");
-                let foodPic = $("<img>").attr("src", elem.restaurant.photos_url);
                 let foodName = $("<h4>").text(elem.restaurant.name);
                 let foodType = $("<p>").text("Cuisines: " + elem.restaurant.cuisines);
                 let foodAddress = $("<p>").text("Address: " + elem.restaurant.location.address);
                 let foodMenu = $("<a>").attr("src", elem.restaurant.menu_url);
-                foodItem.append(foodPic, foodName, foodType, foodMenu, foodAddress);
+                foodItem.append(foodName, foodType, foodMenu, foodAddress);
                 foodArea.append(foodItem);
 
             })

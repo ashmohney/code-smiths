@@ -198,18 +198,7 @@ const updateSearchHistory = (search1, search2) => {
                 searchItem.text(info[elem].searchText.toUpperCase());
                 othersSearched.append(searchItem);
 
-        });
-        let info = snapshot.child("timeStamp").val();
-        console.log(info);
-        for (i=0; i<=5; i++) {
-        // console.log(info.timeStamp);
-        console.log(info);
-            console.log(searchItem);
-
-        }
-        
-        
-        
+        }); 
     });
 
 };

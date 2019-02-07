@@ -76,7 +76,7 @@ const fetchRestaurant = (query, food) => {
             };
         })
         $.ajax({
-            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=3&cuisines=" + encodeURI(food), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&count=5&cuisines=" + encodeURI(food), //encodeURI($("#foodType").val().toLowerCase()), commenting out for testing only
             method: "GET",
             headers: {
                 'user-key': "b7fe6dfdae0278fcd0aea628958bc00a",
@@ -89,8 +89,8 @@ const fetchRestaurant = (query, food) => {
                 let foodName = $("<h4>").text(elem.restaurant.name);
                 let foodType = $("<p>").text("Cuisines: " + elem.restaurant.cuisines);
                 let foodAddress = $("<p>").text("Address: " + elem.restaurant.location.address);
-                let foodMenu = $("<a>").attr("src", elem.restaurant.menu_url);
-                foodItem.append(foodName, foodType, foodMenu, foodAddress);
+                let foodMenu = $("<a>").attr("href", encodeURI(elem.restaurant.menu_url)).attr("target", "_blank").text("Check out the menu!");
+                foodItem.append(foodName, foodType, foodAddress, foodMenu);
                 foodArea.append(foodItem);
 
             })

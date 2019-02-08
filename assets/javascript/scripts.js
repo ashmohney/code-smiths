@@ -188,7 +188,7 @@ const updateSearchHistory = (search1, search2) => {
     // database.ref("/searchHistory").on("value", function(snapshot) {
         // let results = snapshot.limitToLast(5);
         
-        let history = database.ref("searchHistory").orderByChild("time").limitToLast(5);
+        let history = database.ref("searchHistory/").orderByChild("time").limitToFirst(5);
         history.on("value", function(snapshot) { 
             let info = snapshot.val();
             othersSearched.empty();
